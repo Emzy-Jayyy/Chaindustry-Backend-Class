@@ -1,0 +1,39 @@
+{
+  "name": "chaindustry-backend-class",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "build": "echo \"Building the project...\"",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "prettier": "prettier --check .",
+    "prettier:write": "prettier --write .",
+    "dev:server": "nodemon app.js",
+    "dev:watch": "nodemon --watch app.js",
+    "dev:debug": "nodemon --inspect app.js",
+    "dev:debug-brk": "nodemon --inspect-brk app.js",
+    "dev:restart": "nodemon --exec 'npm run dev' app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.1",
+    "helmet": "^8.1.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.5",
+    "nodemailer": "^7.0.5"
+  },
+  "devDependencies": {
+    "bcrypt": "^6.0.0",
+    "nodemon": "^3.1.10"
+  }
+}
