@@ -7,11 +7,12 @@ const schema = Joi.object({
     price: Joi.number().required(),
     images: Joi.any().required(),
     quantity: Joi.number().integer().min(1).required(),
+    productId: Joi.string().required(),
     categoryId: Joi.string().required(),
     shopId: Joi.string().required(),
 });
 
-const validateProductData = async (req, res, next) => {
+const validateProductDataEdit = async (req, res, next) => {
     try {
         const result = await schema.validateAsync(req.body)
         req.body = result
@@ -21,6 +22,6 @@ const validateProductData = async (req, res, next) => {
     }
 }
 
-module.exports = validateProductData
+module.exports = validateProductDataEdit
 
 

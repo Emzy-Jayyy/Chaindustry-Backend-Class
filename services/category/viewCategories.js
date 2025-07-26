@@ -1,28 +1,38 @@
+const { default: mongoose } = require("mongoose");
 const Category = require('../../models/category')
 const ErrorResponse = require('../../utils/ErrorResponse')
 
 const viewCategories = async (req, res, next) => {
-    const { shopId, page = 1, limit = 10 } = req.query;
-    const userId = req.user._id;
-    const filter = { user: userId };
-    
-    if (shopId) filter.shop = shopId;
-    
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-    const categories = await Category.find(filter)
-        .populate('user', 'email')
-        .populate('shop', 'name location brand')
-        .skip(skip)
-        .limit(parseInt(limit));
-    
-    if (!categories || categories.length === 0) {
-        throw new ErrorResponse("No categories found!", 404);
-    }
-    
-    return categories;
-}
+  const limit = Number(req.query.limit) || 24;
 
-module.exports = viewCategories; 
+  const page = Number(req.query.page) || 1;
+
+  const skip = (page - 1) * limit
+
+  const shop =  new mongoose.Types.ObjectId(req.query.shop);
+
+  let category = await Category.find().populate('user', 'name email').populate('shop', 'name location').skip(skip).limit(limit);
+  let totalData = await Category.countDocuments();
+
+  if (shop) {
+    category = await Category.find({shop: shop}).populate('user', 'name email').populate('shop', 'name location').skip(skip).limit(limit);
+    totalData = await Category.countDocuments({shop: shop});
+  }
+
+  const pageNumber = Math.ceil(totalData / limit);
+
+  const metaData = {
+    totalData,
+    pageNumber
+  };
+
+  return {
+    category,
+    metaData
+  };
+};
+
+module.exports = viewCategories;
 
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 // eyJpZCI6IjY4NmU5NTIwY2JjN2I3NjFhMzQ5MDNiZSIsImlhdCI6MTc1MjMzNTUxNiwiZXhwIjoxNzUyMzM5MTE2fQ.

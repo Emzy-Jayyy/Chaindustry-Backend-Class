@@ -1,19 +1,20 @@
 const Category = require('../../models/category')
-const ErrorResponse = require('../../utils/ErrorResponse')
+const ErrorResponse = require("../../utils/ErrorResponse");
 
 const viewCategory = async (req, res, next) => {
-    const { id } = req.params;
-    const userId = req.user._id;
-    
-    const category = await Category.findOne({ _id: id, user: userId })
-        .populate('user', 'email')
-        .populate('shop', 'name location brand');
-    
-    if (!category) {
-        throw new ErrorResponse("Category not found or does not belong to you", 404);
-    }
-    
-    return category;
-}
+  const { categoryId: id } = req.params;
 
-module.exports = viewCategory; 
+  const category = await Category.findById(id)
+    .populate("user", "name email")
+    .populate("shop", "name location");
+  if (!category) {
+    throw new ErrorResponse(
+      `The category ${id} you are looking for doesn't exsist`,
+      404
+    );
+  }
+
+  return category;
+};
+
+module.exports = viewCategory;
